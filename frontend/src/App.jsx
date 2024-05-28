@@ -1,24 +1,11 @@
-import { useState } from 'react'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
 import axios from "axios";
 
-
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
-
-// This is where we will be calling from our backend using await axios.__(localhost....)
-
-
-
-
-
-
-  return (
-    <>
-      
-    </>
-  )
+  return <></>;
 }
 
-export default App
+export default App;

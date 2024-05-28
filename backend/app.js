@@ -1,20 +1,18 @@
 const express = require("express");
 const app = express();
-const port = 5002;
+const port = 5001;
 app.use(express.json());
-
 
 // // Import our firebase: We still need to import out firebase methods later such as collection, getDocs..etc...
 // const db = require("./firebase");
-// // const {/* <firebase methods>*/} = require("firebase/firestore")
+// const {/* <firebase methods>*/} = require("firebase/firestore")
 // const { collection } = require("firebase/firestore");
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
-// Routes will go below; templates are below
-
+// Routes will go below
 // Create a route and a handler for GET /posts
 app.get("/posts", (req, res) => {
   let ret = [];
