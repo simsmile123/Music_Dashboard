@@ -3,6 +3,14 @@ const app = express();
 const port = 5001;
 app.use(express.json());
 
+const cors = require("cors");
+app.use(cors());
+
+// Imported and configured clientid and secret of spotify API
+require("dotenv").config(); 
+const clientId = process.env.clientId;
+const clientSecret = process.env.clientSecret;
+
 // // Import our firebase: We still need to import out firebase methods later such as collection, getDocs..etc...
 // const db = require("./firebase");
 // const {/* <firebase methods>*/} = require("firebase/firestore")
