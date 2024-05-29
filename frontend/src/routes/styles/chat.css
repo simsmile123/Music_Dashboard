@@ -1,6 +1,12 @@
 .chatContainer {
     height: 90vh;
-    width: 70vw;
+    width: 1024px;
     background-color: #FCCB87;
+    border-radius: 8px;
+    justify-self: center;
+}
 
+.navbar {
+    height: max-content;
+    background-color:;
 }

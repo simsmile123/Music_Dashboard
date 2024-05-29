@@ -11,6 +11,7 @@ import Explore from './routes/Explore.jsx';
 import Inbox from './routes/Inbox.jsx';
 import Forum from './routes/Forum.jsx';
 import Chat from './routes/components/Chat.jsx';
+import './index.css'
 
 const router = createBrowserRouter([
     {
