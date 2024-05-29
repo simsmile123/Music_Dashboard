@@ -1,3 +1,11 @@
+import React from "react";
+
+export const InboxInterface = () => {
+  return <div></div>;
+};
+
+export default InboxInterface;
+
 // import ListGroup from 'react-bootstrap/ListGroup';
 
 // function InboxInterface() {
