@@ -21,6 +21,8 @@ const Login = () => {
         <Link to={"/inbox"}>Inbox</Link>
         <br></br>
         <Link to={"/forum"}>Forum</Link>
+        <br></br>
+        <Link to={"/chat"}>Chat</Link>
         </div>
         </>
     )

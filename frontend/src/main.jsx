@@ -10,6 +10,7 @@ import TopSongs from './routes/TopSongs.jsx';
 import Explore from './routes/Explore.jsx';
 import Inbox from './routes/Inbox.jsx';
 import Forum from './routes/Forum.jsx';
+import Chat from './routes/components/Chat.jsx';
 
 const router = createBrowserRouter([
     {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
     {
       path: "/forum",
       element: <Forum />,
+    },
+    {
+      path: "/chat",
+      element: <Chat />,
     },
 ]);
 
