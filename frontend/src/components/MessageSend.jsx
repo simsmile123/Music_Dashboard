@@ -1,6 +1,6 @@
 import '../styles/chat.css'
 import { Button, Form, InputGroup } from 'react-bootstrap';
-import sendIcon from '../Assets/send.svg'
+import sendIcon from '../assets/send.svg'
 import {useState} from 'react';
 
 const MessageSend = ({sendMessage}) => {
