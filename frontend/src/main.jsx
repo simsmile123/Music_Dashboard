@@ -1,17 +1,17 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Login from "./routes/Login.jsx";
-import Home from "./routes/Home.jsx";
-import Profile from "./routes/Profile.jsx";
-import LikedSongs from "./routes/LikedSongs.jsx";
-import TopArtists from "./routes/TopArtists.jsx";
-import TopSongs from "./routes/TopSongs.jsx";
-import Explore from "./routes/Explore.jsx";
-import Inbox from "./routes/Inbox.jsx";
-import Forum from "./routes/Forum.jsx";
-import Chat from "./components/Chat.jsx";
-import "./index.css";
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { createBrowserRouter, RouterProvider,} from "react-router-dom";
+import Login from './routes/Login.jsx';
+import Home from './routes/Home.jsx';
+import Profile from './routes/Profile.jsx';
+import LikedSongs from './routes/LikedSongs.jsx';
+import TopArtists from './routes/TopArtists.jsx';
+import TopSongs from './routes/TopSongs.jsx';
+import Explore from './routes/Explore.jsx';
+import Inbox from './routes/Inbox.jsx';
+import Forum from './routes/Forum.jsx';
+import Chat from './routes/Chat.jsx';
+import './index.css'
 
 const router = createBrowserRouter([
   {
