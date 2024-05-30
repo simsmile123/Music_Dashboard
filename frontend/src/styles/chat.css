@@ -1,9 +1,9 @@
 @import "../variables.css";
 
-.main-container {
+/* .parent-container {
   display: flex;
-  flex-direction: row;
-}
+  flex-direction: column;
+} */
 
 .navbar {
   height: 100vh;
@@ -16,7 +16,7 @@
   margin-left: 20px;
 }
 
-.main-content {
+.parent-container {
   display: flex;
   flex-direction: column;
   flex: 1;

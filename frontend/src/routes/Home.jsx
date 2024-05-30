@@ -5,6 +5,7 @@ import marekImg from "../assets/marek-piwnicki-wgsu3WzFZ5c-unsplash.jpg";
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../components/AuthContext";
 import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 const Home = () => {
   const [messages, setMessages] = useState([]);
@@ -27,8 +28,10 @@ const Home = () => {
     }
   }, []);
   return (
-    <div className="home-container">
-      <main className="main-content">
+    <div className="main-content">
+      <Navbar/>
+      <div className="home-container">
+        <div className="parent-container"> 
         <div className="carousel-section">
           <div
             id="carouselExampleIndicators"
@@ -159,7 +162,8 @@ const Home = () => {
             </div>
           </div>
         </div>
-      </main>
+      </div>
+    </div>
     </div>
   );
 };
