@@ -14,7 +14,7 @@ const AuthProvider = ({ children }) => {
     localStorage.setItem("id", id);
   };
 
-  // Handle log-out b
+  // Handle log-out
   const logout = async ({ id }) => {
     const response = await axios.delete(
       `http://localhost:5001/spotify/logout/${id}`
