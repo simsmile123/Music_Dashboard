@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { AuthProvider } from "./components/AuthContext.jsx";
+import App from "./App.jsx";
 import Login from "./routes/Login.jsx";
 import Home from "./routes/Home.jsx";
 import Profile from "./routes/Profile.jsx";
@@ -12,6 +14,7 @@ import Inbox from "./routes/Inbox.jsx";
 import Forum from "./routes/Forum.jsx";
 import Chat from "./components/Chat.jsx";
 import "./index.css";
+import Auth from "./components/Auth.jsx";
 
 const router = createBrowserRouter([
   {
@@ -58,6 +61,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </React.StrictMode>
 );

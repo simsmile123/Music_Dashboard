@@ -1,10 +1,30 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { AuthContext } from "../components/AuthContext";
+import { Link } from "react-router-dom";
 
 const Home = () => {
+  const [messages, setMessages] = useState([]);
+
+  /* After redirecting to Home set useContext variables */
+  const { login } = useContext(AuthContext);
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const access_token = urlParams.get("access_token");
+    const refresh_token = urlParams.get("refresh_token");
+    const id = urlParams.get("id");
+    const error = urlParams.get("error");
+
+    if (error) {
+      alert("There was an error during the authentication");
+    } else {
+      if (access_token) {
+        login({ access_token, refresh_token, id });
+      }
+    }
+  }, []);
   return (
     <>
       <h1> Home </h1>
-      return (
       <>
         <div>
           <h1>Welcome</h1>
@@ -25,7 +45,6 @@ const Home = () => {
           <Link to={"/forum"}>Forum</Link>
         </div>
       </>
-      )
     </>
   );
 };
