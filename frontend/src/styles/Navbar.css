@@ -5,7 +5,7 @@
   position: fixed; /* Fix the navbar position */
   top: 0; /* Align to the top */
   left: 0; /* Align to the left */
-  background-color: rgb(213, 151, 98); /* Example background color */
+  background-color: #efa498; /* Example background color */
   color: #fff; /* Example text color */
 }
 .pic {
@@ -14,7 +14,7 @@
 .link {
   gap: 7px;
   padding: 0 5px;
-  background-color: rgb(213, 151, 98);
+  background-color: #efa498;
   margin: 5px;
   display: flex;
   align-items: center;
