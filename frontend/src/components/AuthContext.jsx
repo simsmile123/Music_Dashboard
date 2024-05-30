@@ -6,8 +6,7 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
 
-
-  // Handle log-in 
+  // Handle log-in
   const login = ({ access_token, refresh_token, id, firebaseId }) => {
     setUserData({ access_token, refresh_token, id });
     localStorage.setItem("access_token", access_token);
@@ -15,11 +14,8 @@ const AuthProvider = ({ children }) => {
     localStorage.setItem("id", id);
   };
 
-  // Handle log-out button
+  // Handle log-out b
   const logout = async ({ id }) => {
-    setUserData(null);
-    localStorage.clear();
-    console.log(id);
     const response = await axios.delete(
       `http://localhost:5001/spotify/logout/${id}`
     );
