@@ -1,7 +1,8 @@
 import '../styles/chat.css'
 import Message from '../components/Message';
 import MessageSend from '../components/MessageSend';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios'
 
 const Chat = () => {
     const [isMe, setIsMe] = useState(true)
@@ -9,6 +10,19 @@ const Chat = () => {
     const sendMessage = (message) => {
         console.log("message to be send: ", message)
     }
+
+    const fetchMessages = async () => {
+        try {
+           const response = await axios.get('http://localhost:5001/users')
+           console.log(response.data)
+        } catch (e){
+            console.log(e)
+        }
+     }
+
+     useEffect(() => {
+        fetchMessages()
+     })
 
     return (
         <div className='main-container'>  
