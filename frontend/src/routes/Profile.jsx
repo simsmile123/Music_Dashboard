@@ -1,11 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AuthContext } from "../components/AuthContext";
+import Navbar from "../components/Navbar";
 
 const Profile = () => {
-    return (
-        <>
-        <h1>Profile</h1>
-        </>
-    )
+  const { user, logout } = useContext(AuthContext);
+
+  return (
+    <>
+      <Navbar/>
+      <h1>Profile</h1>
+      <button onClick = {logout}> Logout</button>
+    </>
+  );
 };
 
 export default Profile;

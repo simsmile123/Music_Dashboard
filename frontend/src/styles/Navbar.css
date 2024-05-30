@@ -1,0 +1,36 @@
+/* Navbar.css */
+.navbarv {
+  width: 175px;
+  height: 100vh; /* Set height to full viewport height */
+  position: fixed; /* Fix the navbar position */
+  top: 0; /* Align to the top */
+  left: 0; /* Align to the left */
+  background-color: #efa498; /* Example background color */
+  color: #fff; /* Example text color */
+  display: flex;
+  flex-direction: column;
+}
+
+.link {
+  gap: 7px;
+  padding: 0 5px;
+  margin: 5px;
+  display: flex;
+  /* align-items: left; */
+  flex-direction: row;
+}
+
+.navbarv h1 {
+  margin-bottom: 1rem;
+}
+
+.navbarv a {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: black;
+  text-decoration: none;
+}
+
+.navbarv a:hover {
+  text-decoration: underline;
+}

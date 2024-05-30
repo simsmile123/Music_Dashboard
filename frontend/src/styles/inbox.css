@@ -1,0 +1,41 @@
+body {
+font-family: Arial, sans-serif;
+}
+
+.search-bar {
+width: 100%;
+padding: 10px;
+margin-bottom: 20px;
+box-sizing: border-box;
+}
+
+.chat-card {
+border: 1px solid #ffffff;
+padding: 10px;
+margin: 0;
+cursor: pointer;
+transition: background-color 0.3s;
+}
+
+.chat-card:hover {
+background-color: #ffffff;
+}
+
+.chat-card-header {
+display: flex;
+justify-content: space-between;
+}
+
+.chat-card-header strong {
+font-size: 1.1em;
+}
+
+.chat-card-header span {
+font-size: 0.9em;
+color: #555;
+}
+
+.chat-card-message {
+margin-top: 5px;
+color: #333;
+}
