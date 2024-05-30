@@ -1,13 +1,12 @@
 import React from "react";
+import Navbar from "../components/Navbar.jsx"
 
 const Home = () => {
   return (
     <>
       <h1> Home </h1>
-      return (
-      <>
-        <div>
-          <h1>Welcome</h1>
+      {/* <Navbar/> */}
+          {/* <h1>Welcome</h1>
           <Link to={"/home"}>Home</Link>
           <br></br>
           <Link to={"/profile"}>Profile</Link>
@@ -22,10 +21,7 @@ const Home = () => {
           <br></br>
           <Link to={"/inbox"}>Inbox</Link>
           <br></br>
-          <Link to={"/forum"}>Forum</Link>
-        </div>
-      </>
-      )
+          <Link to={"/forum"}>Forum</Link> */}
     </>
   );
 };
