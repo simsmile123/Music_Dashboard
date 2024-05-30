@@ -26,13 +26,15 @@ const Inbox = () => {
     );
   
     return (
-      <div style={{ padding: '20px' }}>
-        <Navbar/>
-        <InboxSearch searchTerm={searchTerm} onSearch={setSearchTerm} />
-        {filteredChats.map(chat => (
-          <InboxCard key={chat.id} chat={chat} />
-        ))}
-      </div>
+        <div className='inbox-wrapper'>
+            <Navbar/>
+            <div className='chatbox-wrapper'>
+                <InboxSearch searchTerm={searchTerm} onSearch={setSearchTerm} />
+                {filteredChats.map(chat => (
+                <InboxCard key={chat.id} chat={chat} />
+                ))}
+            </div>
+        </div>
     );
   };
   
