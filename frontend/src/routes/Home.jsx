@@ -1,10 +1,31 @@
-import React from "react";
 import "../styles/Home.css"; // Assuming you place the CSS in Home.css
 import detaitImg from "../assets/detait-SXyfhR4jmRA-unsplash.jpg";
 import gabrielImg from "../assets/gabriel-gurrola-2UuhMZEChdc-unsplash.jpg";
 import marekImg from "../assets/marek-piwnicki-wgsu3WzFZ5c-unsplash.jpg";
+import React, { useState, useEffect, useContext } from "react";
+import { AuthContext } from "../components/AuthContext";
+import { Link } from "react-router-dom";
 
 const Home = () => {
+  const [messages, setMessages] = useState([]);
+
+  /* After redirecting to Home set useContext variables */
+  const { login } = useContext(AuthContext);
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const access_token = urlParams.get("access_token");
+    const refresh_token = urlParams.get("refresh_token");
+    const id = urlParams.get("id");
+    const error = urlParams.get("error");
+
+    if (error) {
+      alert("There was an error during the authentication");
+    } else {
+      if (access_token) {
+        login({ access_token, refresh_token, id });
+      }
+    }
+  }, []);
   return (
     <div className="home-container">
       <main className="main-content">
