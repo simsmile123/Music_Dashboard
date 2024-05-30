@@ -1,42 +1,36 @@
-/**
- * This is an example of a basic node.js script that performs
- * the Authorization Code oAuth2 flow to authenticate against
- * the Spotify Accounts.
- *
- * For more information, read
- * https://developer.spotify.com/documentation/web-api/tutorials/code-flow
- */
+const express = require("express");
+const router = express.Router();
 
-var express = require("express");
-var request = require("request");
-var crypto = require("crypto");
-var cors = require("cors");
-var querystring = require("querystring");
-var cookieParser = require("cookie-parser");
+require("dotenv").config();
+const request = require("request");
+const util = require("util");
+const requestGet = util.promisify(request.get);
+const axios = require("axios");
+const querystring = require("querystring");
+const cookieParser = require("cookie-parser");
+const crypto = require("crypto");
 
-var client_id = "yourClientIDGoesHere"; // your clientId
-var client_secret = "YourSecretIDGoesHere"; // Your secret
-var redirect_uri = "http://localhost:8888/callback"; // Your redirect uri
+// backend port
+const port = 5001;
+
+const client_id = process.env.clientId;
+const client_secret = process.env.clientSecret;
+const redirect_uri = process.env.REDIRECT_URI;
+
+const stateKey = "spotify_auth_state";
 
 const generateRandomString = (length) => {
   return crypto.randomBytes(60).toString("hex").slice(0, length);
 };
 
-var stateKey = "spotify_auth_state";
+router.use(cookieParser());
 
-var app = express();
-
-app
-  .use(express.static(__dirname + "/public"))
-  .use(cors())
-  .use(cookieParser());
-
-app.get("/login", function (req, res) {
+router.get("/login", function (req, res) {
   var state = generateRandomString(16);
   res.cookie(stateKey, state);
 
   // your application requests authorization
-  var scope = "user-read-private user-read-email";
+  var scope = "user-read-private user-read-email user-top-read";
   res.redirect(
     "https://accounts.spotify.com/authorize?" +
       querystring.stringify({
@@ -49,7 +43,7 @@ app.get("/login", function (req, res) {
   );
 });
 
-app.get("/callback", function (req, res) {
+router.get("/callback", function (req, res) {
   // your application requests refresh and access tokens
   // after checking the state parameter
 
@@ -82,7 +76,7 @@ app.get("/callback", function (req, res) {
       json: true,
     };
 
-    request.post(authOptions, function (error, response, body) {
+    request.post(authOptions, async function (error, response, body) {
       if (!error && response.statusCode === 200) {
         var access_token = body.access_token,
           refresh_token = body.refresh_token;
@@ -94,21 +88,21 @@ app.get("/callback", function (req, res) {
         };
 
         // use the access token to access the Spotify Web API
-        request.get(options, function (error, response, body) {
-          console.log(body);
-        });
+        const userInfoResponse = await requestGet(options);
+        const userInfo = userInfoResponse.body;
 
         // we can also pass the token to the browser to make requests from there
         res.redirect(
-          "/#" +
+          "http://localhost:5173/?" +
             querystring.stringify({
               access_token: access_token,
               refresh_token: refresh_token,
+              id: userInfo.id,
             })
         );
       } else {
         res.redirect(
-          "/#" +
+          "http://localhost:5173/" +
             querystring.stringify({
               error: "invalid_token",
             })
@@ -118,7 +112,7 @@ app.get("/callback", function (req, res) {
   }
 });
 
-app.get("/refresh_token", function (req, res) {
+router.get("/refresh_token", function (req, res) {
   var refresh_token = req.query.refresh_token;
   var authOptions = {
     url: "https://accounts.spotify.com/api/token",
@@ -147,5 +141,93 @@ app.get("/refresh_token", function (req, res) {
   });
 });
 
-console.log("Listening on 8888");
-app.listen(8888);
+router.get("/user-info", (req, res) => {
+  const accessToken = req.query.access_token;
+
+  if (!accessToken) {
+    return res.status(400).json({ error: "Access token is required" });
+  }
+
+  const options = {
+    url: "https://api.spotify.com/v1/me",
+    headers: { Authorization: "Bearer " + accessToken },
+    json: true,
+  };
+
+  request.get(options, (error, response, body) => {
+    if (error) {
+      return res.status(500).json({ error: "Failed to fetch user data" });
+    }
+    res.status(200).json(body);
+  });
+});
+
+/* 
+  Getting a user's top tracks
+*/
+router.get("/top-tracks", (req, res) => {
+  const accessToken = req.query.access_token;
+
+  if (!accessToken) {
+    return res.status(400).json({ error: "Access token is required" });
+  }
+
+  const options = {
+    url: "https://api.spotify.com/v1/me/top/tracks",
+    headers: { Authorization: "Bearer " + accessToken },
+    json: true,
+  };
+
+  request.get(options, (error, response, body) => {
+    if (error) {
+      return res.status(500).json({ error: "Failed to fetch top tracks" });
+    }
+    res.status(200).json(body);
+  });
+});
+
+router.get("/top-artists", (req, res) => {
+  const accessToken = req.query.access_token;
+
+  if (!accessToken) {
+    return res.status(400).json({ error: "Access token is required" });
+  }
+
+  const options = {
+    url: "https://api.spotify.com/v1/me/top/artists",
+    headers: { Authorization: "Bearer " + accessToken },
+    json: true,
+  };
+
+  request.get(options, (error, response, body) => {
+    if (error) {
+      return res.status(500).json({ error: "Failed to fetch top artists" });
+    }
+    res.status(200).json(body);
+  });
+});
+
+router.get("/artist", (req, res) => {
+  const accessToken = req.query.access_token;
+  const artistId = req.query.artistId;
+
+  if (!accessToken) {
+    return res.status(400).json({ error: "Access token is required" });
+  }
+
+  const options = {
+    url: `https://api.spotify.com/v1/artists/${artistId}`,
+    headers: { Authorization: "Bearer " + accessToken },
+    json: true,
+  };
+
+  request.get(options, (error, response, body) => {
+    if (error) {
+      return res
+        .status(500)
+        .json({ error: `Failed to fetch artist info with id ${artistID}` });
+    }
+    res.status(200).json(body);
+  });
+});
+module.exports = router;

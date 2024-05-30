@@ -1,12 +1,122 @@
-.chatContainer {
-    height: 90vh;
-    width: 1024px;
-    background-color: #FCCB87;
+@import '../variables.css';
+
+.main-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.navbar {
+    height: 100vh;
+    width: 280px;
+    background-color: var(--main-fg-color);
+    margin-left: 0px;
+}
+
+.main-title {
+    margin-left: 20px;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    align-items: center;
+    position: relative;
+}
+
+
+.chat-title-container{
+    width: 1300px;
+    height: 110px;
+    background-color: var(--secondary-fg-color);
+    border-radius: 8px;
+}
+
+.chat-container {
+    height: 725px;
+    width: 1300px;
+    background-color: var(--secondary-fg-color);
     border-radius: 8px;
     justify-self: center;
 }
 
-.navbar {
-    height: max-content;
-    /* background-color:; */
+/* Message Bubble */
+.message-container {
+    max-width: 700px;
+    min-width: 400px;
+    min-height: 50px;
+    margin-left: 60px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding-bottom: 4px;
+    background-color: var(--main-fg-color);
+    border-radius: 25px;
+}
+
+.message-container-me {
+    max-width: 700px;
+    min-width: 400px;
+    min-height: 50px;
+    margin-left: 538px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding-bottom: 4px;
+    background-color: var(--me-message-bubble);
+    border-radius: 25px;
+}
+
+.text-container {
+    margin-left: 20px;
+}
+
+.contact {
+    margin-bottom: 0px;
+    color: #795B33;
+}
+
+.message {
+    margin-top: 0px;
+}
+
+
+/* Message Send */
+.form-container {
+   display: flex;
+   justify-content: center; 
+}
+
+.send-message {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-left: 20px;
+    height: 40px;
+    width: 500px;
+    background-color: var(--main-bg-color);
+    border: none;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+    font-size: 16px;
+}
+
+.send-message:focus {
+    outline: none;
+}
+
+.send-button {
+    height: 42px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-right: 20px;
+    border: none;
+    border-color: var(--main-bg-color);
+    background-color: var(--main-bg-color);
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+}
+
+.send-container {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
 }
