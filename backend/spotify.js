@@ -12,9 +12,21 @@ const crypto = require("crypto");
 
 const client_id = process.env.clientId;
 const client_secret = process.env.clientSecret;
+
 const redirect_uri = "http://localhost:5001/spotify/callback";
 
 const stateKey = "spotify_auth_state";
+
+// Utilizing firebase to store items
+const db = require("./firebase");
+const {
+  collection,
+  getDocs,
+  updateDoc,
+  doc,
+  setDoc,
+  deleteDoc,
+} = require("firebase/firestore");
 
 const generateRandomString = (length) => {
   return crypto.randomBytes(60).toString("hex").slice(0, length);
@@ -98,6 +110,22 @@ router.get("/callback", function (req, res) {
         // use the access token to access the Spotify Web API
         const userInfoResponse = await requestGet(options);
         const userInfo = userInfoResponse.body;
+
+        // Perform database operations here
+        // try {
+        //   await firebase
+        //     .database()
+        //     .ref("users/" + userInfo.id)
+        //     .set({
+        //       name: userInfo.display_name,
+        //       email: userInfo.email,
+
+        //     });
+        //   console.log("User info stored in Firebase database");
+        // } catch (error) {
+        //   console.error("Error storing user info:", error);
+        //   // Handle error
+        // }
 
         // we can also pass the token to the browser to make requests from there
         res.redirect(
@@ -239,6 +267,7 @@ router.get("/artist", (req, res) => {
   });
 });
 
+// Get user's liked songs
 router.get("/liked-songs", (req, res) => {
   const accessToken = req.query.access_token;
 
@@ -258,7 +287,6 @@ router.get("/liked-songs", (req, res) => {
         .status(500)
         .json({ error: "Failed to fetch users liked songs" });
     }
-    console.log("liked-tracks", body);
     res.status(200).json(body);
   });
 });

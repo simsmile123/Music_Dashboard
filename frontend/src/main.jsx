@@ -14,7 +14,7 @@ import Inbox from "./routes/Inbox.jsx";
 import Forum from "./routes/Forum.jsx";
 import Chat from "./components/Chat.jsx";
 import "./index.css";
-import Auth from "./components/Auth.jsx";
+// import Auth from "./components/Auth.jsx";
 
 const router = createBrowserRouter([
   {
