@@ -1,13 +1,37 @@
-import React from "react";
-import InboxInterface from "../components/InboxInterface";
+import React, { useState } from 'react';
+import InboxSearch from '../components/InboxSearch';
+import InboxCard from '../components/InboxCard';
 
-export const Inbox = () => {
-  return (
-    <>
-      <h1>Inbox</h1>
-      <InboxInterface />
-    </>
-  );
-};
+const Inbox = () => {
+    const [searchTerm, setSearchTerm] = useState('');
 
-export default Inbox;
+    const chats = [
+        {
+          id: 1,
+          user: 'Alice',
+          lastMessage: 'Hey there!',
+          timestamp: '2024-05-30T14:48:00.000Z',
+        },
+        {
+          id: 2,
+          user: 'Bob',
+          lastMessage: 'How are you?',
+          timestamp: '2024-05-29T10:23:00.000Z',
+        },
+      ];
+
+    const filteredChats = chats.filter(chat =>
+      chat.user.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  
+    return (
+      <div style={{ padding: '20px' }}>
+        <InboxSearch searchTerm={searchTerm} onSearch={setSearchTerm} />
+        {filteredChats.map(chat => (
+          <InboxCard key={chat.id} chat={chat} />
+        ))}
+      </div>
+    );
+  };
+  
+  export default Inbox;
