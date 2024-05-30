@@ -10,12 +10,9 @@ const querystring = require("querystring");
 const cookieParser = require("cookie-parser");
 const crypto = require("crypto");
 
-// backend port
-const port = 5001;
-
 const client_id = process.env.clientId;
 const client_secret = process.env.clientSecret;
-const redirect_uri = process.env.REDIRECT_URI;
+const redirect_uri = "http://localhost:5001/spotify/callback";
 
 const stateKey = "spotify_auth_state";
 
@@ -30,7 +27,7 @@ router.get("/login", function (req, res) {
   res.cookie(stateKey, state);
 
   // your application requests authorization
-  var scope = "user-read-private user-read-email user-top-read";
+  var scope = "user-read-private user-read-email user-library-read";
   res.redirect(
     "https://accounts.spotify.com/authorize?" +
       querystring.stringify({
@@ -41,6 +38,17 @@ router.get("/login", function (req, res) {
         state: state,
       })
   );
+});
+
+router.delete("/logout/:id", async (req, res) => {
+  try {
+    console.log(req.params);
+    const id = req.params.id;
+    await deleteDoc(doc(db, "users", id));
+    res.status(200).json({ message: `Successfully deleted user` });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
 });
 
 router.get("/callback", function (req, res) {
@@ -93,7 +101,7 @@ router.get("/callback", function (req, res) {
 
         // we can also pass the token to the browser to make requests from there
         res.redirect(
-          "http://localhost:5173/?" +
+          "http://localhost:5173/#" +
             querystring.stringify({
               access_token: access_token,
               refresh_token: refresh_token,
@@ -102,7 +110,7 @@ router.get("/callback", function (req, res) {
         );
       } else {
         res.redirect(
-          "http://localhost:5173/" +
+          "http://localhost:5173/#" +
             querystring.stringify({
               error: "invalid_token",
             })
@@ -230,4 +238,29 @@ router.get("/artist", (req, res) => {
     res.status(200).json(body);
   });
 });
+
+router.get("/liked-songs", (req, res) => {
+  const accessToken = req.query.access_token;
+
+  if (!accessToken) {
+    return res.status(400).json({ error: "Access token is required" });
+  }
+
+  const options = {
+    url: "https://api.spotify.com/v1/me/tracks",
+    headers: { Authorization: "Bearer " + accessToken },
+    json: true,
+  };
+
+  request.get(options, (error, response, body) => {
+    if (error) {
+      return res
+        .status(500)
+        .json({ error: "Failed to fetch users liked songs" });
+    }
+    console.log("liked-tracks", body);
+    res.status(200).json(body);
+  });
+});
+
 module.exports = router;
