@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import Auth from "../components/Auth";
-import "/src/styles/Login.css";
+import Home from "../routes/Home";
+import "../styles/Login.css";
 
-export const Login = () => {
+const Login = () => {
+  // User isn't logged in yet.
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // If authentication passes, user will be sent to the home page
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
   return (
-    <div>
-      <Auth />
-    </div>
+    <div>{isLoggedIn ? <Home /> : <Auth handleLogin={handleLogin} />}</div>
   );
 };
 
