@@ -72,6 +72,7 @@ const Inbox = () => {
         <div className='inbox-wrapper'>
             <Navbar/>
             <div className='chatbox-wrapper'>
+                <h1>Inbox</h1>
                 <InboxSearch searchTerm={searchTerm} onSearch={setSearchTerm} />
                 {filteredChats.map(chat => (
                 <InboxCard key={chat.id} chat={chat} />
