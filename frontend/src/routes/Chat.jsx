@@ -4,6 +4,8 @@ import MessageSend from '../components/MessageSend';
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios'
 import Navbar from '../components/Navbar';
+import empty from "../assets/mail.png";
+
 
 const Chat = () => {
     const [myUserName, setMyUserName] = useState('')
@@ -70,18 +72,18 @@ const Chat = () => {
             <div className='main-container'> 
                 <div className='parent-container'>
                     <div className='chat-title-container'> 
-                        <h1 className='main-title'>{conversation[0]?.user}</h1>
+                        <h1 className='main-title'>{  conversation[0]?.user }</h1>
                     </div>
 
                     <div className="chat-container" ref={chatContainerRef}>
                         <div className='conversation-container'> 
-                            {conversation.map((message, index) => { 
+                            {conversation[0] ? conversation.map((message, index) => { 
                                 return (
                                 <>
                                     <Message key={index} me={myUserName == message.user} sender={message.user} message={message.message}/>
                                 </>
                             )
-                            })}
+                            }) : <img className='empty-message' src={empty}/>}
                         </div>
                     </div>
                         <div className='send-container'>

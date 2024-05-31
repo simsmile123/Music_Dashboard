@@ -43,6 +43,26 @@ router.get("/chat/:chatID", async (req, res) => {
     }
 })
 
+//get conversation from forum id
+router.get("/forum/:forumID", async (req, res) => {
+    const id = req.params.forumID;
+    console.log(id)
+    try {
+        let ret = [];
+        const querySnapshot = await getDoc(doc(db, "forums", id));
+        if (querySnapshot.exists()) {
+            res.status(200).json({
+                id: querySnapshot.id,
+                ...querySnapshot.data()
+            });
+        } else {
+            res.status(404).json({ error: "Forum not found" });
+        res.status(200).json(ret)};
+    } catch (e) {
+        res.status(400).json({error: e.message});
+    }
+})
+
 //add message to an existing chat
 router.put("/chat/:chatID", async (req, res) => {
     const id = req.params.chatID
@@ -56,6 +76,24 @@ router.put("/chat/:chatID", async (req, res) => {
             history: arrayUnion({message:message, time:time, user:user})
         })
     res.status(200).json({message: `Successfully updated chat with id ${id}`})
+    } catch (e) {
+        res.status(400).json({error: e.message})
+    }
+})
+
+//add message to an existing chat
+router.put("/forum/:forumID", async (req, res) => {
+    const id = req.params.forumID
+    const message = req.body.message
+    const time = req.body.time 
+    const user = req.body.user
+
+    try {
+        const docRef = doc(db, "forums", id); 
+        await updateDoc(docRef, {
+            history: arrayUnion({message:message, time:time, user:user})
+        })
+    res.status(200).json({message: `Successfully updated forum with id ${id}`})
     } catch (e) {
         res.status(400).json({error: e.message})
     }

@@ -1,7 +1,7 @@
 @import "../variables.css";
 
-.parent-container {
- 
+.empty-message{
+    opacity: 30%;
 }
 
 .navbar {

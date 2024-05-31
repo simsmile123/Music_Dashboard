@@ -4,16 +4,18 @@ import MessageSend from '../components/MessageSend';
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios'
 import Navbar from '../components/Navbar';
+import empty from "../assets/mail.png"
 
-const Chat = () => {
+const ForumChat = () => {
     const [myUserName, setMyUserName] = useState('')
     const [myUserID, setMyUserID] = useState('')
-    const [chatID, setChatID] = useState('')
+    const [forumID, setForumID] = useState('')
+    const [forumTitle, setForumTitle] = useState('')
     const [conversation, setConversation] = useState([])
     const chatContainerRef = useRef(null);
 
     const sendMessage = async (message) => {
-        const id = 'oLZO2BY2mYv4QAvS6P1w' 
+        const id = 'cqLcCNGx1y0oe5zMXN6V' 
         console.log("message to be send: ", message)
         const data = {
             message: message,
@@ -22,7 +24,7 @@ const Chat = () => {
         }
 
         try {
-            await axios.put(`http://localhost:5001/messages/chat/${id}`, data)
+            await axios.put(`http://localhost:5001/messages/forum/${id}`, data)
         } catch (e) {
             console.error(e)
         }
@@ -40,11 +42,12 @@ const Chat = () => {
         }
     }
 
-    const fetchConversation = async (chatID) => {
-        const id = 'oLZO2BY2mYv4QAvS6P1w'
+    const fetchConversation = async (forumID) => {
+        const id = 'cqLcCNGx1y0oe5zMXN6V'
         try {
-            const response = await axios.get(`http://localhost:5001/messages/chat/${id}`)
+            const response = await axios.get(`http://localhost:5001/messages/forum/${id}`)
             setConversation(response.data.history)
+            setForumTitle(response.data.title)
             console.log(response, " -> Conversations")
         } catch (e) {
             console.error(e)
@@ -54,8 +57,8 @@ const Chat = () => {
     useEffect(() => {
         // fetchMessages()
         setMyUserName("Milton")
-        setChatID('oLZO2BY2mYv4QAvS6P1w') //use the provided chatID instead
-        fetchConversation(chatID)
+        setForumID('oLZO2BY2mYv4QAvS6P1w') //use the provided forumID instead
+        fetchConversation(forumID)
     }, [])
 
     useEffect(() => {
@@ -70,18 +73,18 @@ const Chat = () => {
             <div className='main-container'> 
                 <div className='parent-container'>
                     <div className='chat-title-container'> 
-                        <h1 className='main-title'>{conversation[0]?.user}</h1>
+                        <h1 className='main-title'>{forumTitle}</h1>
                     </div>
 
                     <div className="chat-container" ref={chatContainerRef}>
                         <div className='conversation-container'> 
-                            {conversation.map((message, index) => { 
+                            {conversation[0] ? conversation.map((message, index) => { 
                                 return (
                                 <>
                                     <Message key={index} me={myUserName == message.user} sender={message.user} message={message.message}/>
                                 </>
                             )
-                            })}
+                            }) : <img className='empty-message' src={empty}/>}
                         </div>
                     </div>
                         <div className='send-container'>
@@ -94,4 +97,4 @@ const Chat = () => {
     )
 };
 
-export default Chat;
+export default ForumChat;
