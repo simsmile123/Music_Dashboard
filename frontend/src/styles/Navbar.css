@@ -1,11 +1,11 @@
 /* Navbar.css */
 .navbarv {
-  width: 175px;
+  width: 200px;
   height: 100vh; /* Set height to full viewport height */
   position: fixed; /* Fix the navbar position */
   top: 0; /* Align to the top */
   left: 0; /* Align to the left */
-  background-color: #efa498; /* Example background color */
+  background-color: var(--main-fg-color); /* Example background color */
   color: #fff; /* Example text color */
   display: flex;
   flex-direction: column;
