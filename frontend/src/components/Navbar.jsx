@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import "../styles/Navbar.css";
 
 function Navbar() {
@@ -7,7 +7,7 @@ function Navbar() {
     <nav className="navbarv">
       <h2>Welcome</h2>
 
-      <Link to="/home">
+      <NavLink to="/home" activeClassName="active-link">
         {" "}
         <div className="link">
           <svg
@@ -22,7 +22,7 @@ function Navbar() {
           </svg>{" "}
           Home{" "}
         </div>{" "}
-      </Link>
+      </NavLink>
       <br />
       <Link to="/profile">
         {" "}

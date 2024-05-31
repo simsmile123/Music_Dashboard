@@ -16,6 +16,9 @@ app.use("/spotify", spotify);
 const messagingRouter = require("./messaging.js");
 app.use("/messages", messagingRouter);
 
+const inboxRouter = require("./inbox.js");
+app.use("/inbox", inboxRouter);
+
 // // Import our firebase: We still need to import out firebase methods later such as collection, getDocs..etc...
 const db = require("./firebase");
 const {

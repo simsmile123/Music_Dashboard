@@ -3,6 +3,7 @@
   width: 200px;
   height: 100vh; /* Set height to full viewport height */
   position: fixed; /* Fix the navbar position */
+  padding-left: 20px;
   top: 0; /* Align to the top */
   left: 0; /* Align to the left */
   background-color: var(--main-fg-color); /* Example background color */
@@ -16,8 +17,8 @@
   padding: 0 5px;
   margin: 5px;
   display: flex;
-  /* align-items: left; */
   flex-direction: row;
+  border-radius: 2px;
 }
 
 .navbarv h1 {
@@ -31,6 +32,11 @@
   text-decoration: none;
 }
 
-.navbarv a:hover {
+.navbarv a:hover,
+.navbarv a:focus,
+.navbarv a:active,
+.navbarv .active-link {
   text-decoration: underline;
+  text-decoration-color: #FDE4C1;
+  /* color: #FDE4C1; */
 }

@@ -5,17 +5,22 @@ import { useEffect, useState, useRef } from 'react';
 import axios from 'axios'
 import Navbar from '../components/Navbar';
 import empty from "../assets/mail.png";
+import { useParams } from "react-router-dom";
 
 
 const Chat = () => {
     const [myUserName, setMyUserName] = useState('')
-    const [myUserID, setMyUserID] = useState('')
-    const [chatID, setChatID] = useState('')
+    const myUserID = localStorage.getItem("id");
+    let { chatuID } = useParams();
+    // const [chatID, setChatID] = useState('')
     const [conversation, setConversation] = useState([])
     const chatContainerRef = useRef(null);
 
+    console.log("chat ID",chatuID)
+
     const sendMessage = async (message) => {
-        const id = 'oLZO2BY2mYv4QAvS6P1w' 
+        // const id = 'oLZO2BY2mYv4QAvS6P1w' 
+        // console.log(chatID);
         console.log("message to be send: ", message)
         const data = {
             message: message,
@@ -24,7 +29,7 @@ const Chat = () => {
         }
 
         try {
-            await axios.put(`http://localhost:5001/messages/chat/${id}`, data)
+            await axios.put(`http://localhost:5001/messages/chat/${chatuID}`, data)
         } catch (e) {
             console.error(e)
         }
@@ -43,9 +48,9 @@ const Chat = () => {
     }
 
     const fetchConversation = async (chatID) => {
-        const id = 'oLZO2BY2mYv4QAvS6P1w'
+        // const id = 'oLZO2BY2mYv4QAvS6P1w'
         try {
-            const response = await axios.get(`http://localhost:5001/messages/chat/${id}`)
+            const response = await axios.get(`http://localhost:5001/messages/chat/${chatuID}`)
             setConversation(response.data.history)
             console.log(response, " -> Conversations")
         } catch (e) {
@@ -56,8 +61,8 @@ const Chat = () => {
     useEffect(() => {
         // fetchMessages()
         setMyUserName("Milton")
-        setChatID('oLZO2BY2mYv4QAvS6P1w') //use the provided chatID instead
-        fetchConversation(chatID)
+        // setChatID(chatuID) 
+        fetchConversation(chatuID)
     }, [])
 
     useEffect(() => {

@@ -135,7 +135,6 @@ router.get("/callback", function (req, res) {
         } else {
           await setDoc(doc(db, "users", user.id), userdata);
         }
-
         // console.log(usersResponse.body);
 
         //get a list of the songs saved in the current spotify user's library
@@ -193,7 +192,12 @@ router.get("/callback", function (req, res) {
           let topartist = {};
 
           topartist.artist_name = artist.name;
-          topartist.artist_img = artist.images[1].url;
+          if (topartist.images?.length > 0){
+            topartist.user_image = artist.images[0].url;
+          }
+          else{
+            topartist.user_image = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
+          }
 
           topartistsdata.push(topartist);
           // console.log(artist.images);
