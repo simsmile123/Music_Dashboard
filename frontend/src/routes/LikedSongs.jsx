@@ -67,7 +67,7 @@ const LikedSongs = () => {
                 {likedSongs.map((track, index) => (
                   <tr key={index}>
                     <td>
-                    <img src={track.track_img}></img>
+                      <img src={track.track_img}></img>
                     </td>
                     <td>{track.track_name}</td>
                     <td>{track.track_artist}</td>

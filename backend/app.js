@@ -46,9 +46,23 @@ app.get("/liked-songs/:id", async (req, res) => {
   res.status(200).json(likedsong);
 });
 
+app.get("/top-songs/:id", async (req, res) => {
+  const id = req.params.id;
+  // console.log(id);
+  const docsnap = await getDoc(doc(db, "users", id));
+  const topsong = docsnap.data().top_tracks;
+  // Send the data array as a JSON response
+  res.status(200).json(topsong);
+});
+
+app.get("/top-artists/:id", async (req, res) => {
+  const id = req.params.id;
+  const docsnap = await getDoc(doc(db, "users", id));
+  const topartist = docsnap.data().top_artists;
+  res.status(200).json(topartist);
+});
+
 const port = 5001;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
-

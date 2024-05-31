@@ -5,12 +5,12 @@ import "../styles/Login.css";
 
 const Login = () => {
   // User isn't logged in yet.
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // If authentication passes, user will be sent to the home page
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-  };
+  // // If authentication passes, user will be sent to the home page
+  // const handleLogin = () => {
+  //   setIsLoggedIn(true);
+  // };
 
   return (
     // <div>{isLoggedIn ? <Home /> : <Auth handleLogin={handleLogin} />}</div>
