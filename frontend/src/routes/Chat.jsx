@@ -9,7 +9,7 @@ import empty from "../assets/mail.png";
 
 const Chat = () => {
     const [myUserName, setMyUserName] = useState('')
-    const [myUserID, setMyUserID] = useState('')
+    const myUserID = localStorage.getItem("id");
     const [chatID, setChatID] = useState('')
     const [conversation, setConversation] = useState([])
     const chatContainerRef = useRef(null);

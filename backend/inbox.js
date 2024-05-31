@@ -3,30 +3,58 @@ const router = express.Router();
 const db = require("./firebase");
 const { collection, getDoc, doc, addDoc, updateDoc, arrayUnion, arrayRemove} = require("firebase/firestore");
 
-router.get("/inbox/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
+    const id = req.params.id;
     try {
-        const id = req.params.id;
-        console.log(id);
-        const user = await getDoc(collection(db, "users", id));
-        const chats = user.data().chats
+        console.log('ID:', id);
+        const user = await getDoc(doc(db, "users", id));
+        const chats = user.data()
+        console.log('Data', chats)
         res.status(200).json(chats);
     } catch (e) {
         res.status(400).json({ error: e.message });
     }
 })
 
-router.get("/inbox/:id/:chatid", async (req, res) => {
+router.get("/chat/:chatID", async (req, res) => {
+    const id = req.params.chatID;
+    console.log(id)
     try {
-        const chatId = req.params.chatId;
-        const chat = await getDoc(collection(db, "chats", chatId));
-        const chatData = chat.data();
-        res.status(200).json(chatData);
+        let ret = [];
+        const querySnapshot = await getDoc(doc(db, "chats", id));
+        if (querySnapshot.exists()) {
+            res.status(200).json({
+                id: querySnapshot.id,
+                ...querySnapshot.data()
+            });
+        } else {
+            res.status(404).json({ error: "Chat not found" });
+        res.status(200).json(ret)};
     } catch (e) {
-        res.status(400).json({ error: e.message });
+        res.status(400).json({error: e.message});
     }
 })
 
-router.delete("/inbox/:id/:chatid", async (req, res) => {
+router.get("/:chatid", async (req, res) => {
+    const id = req.params.chatID;
+    console.log(id)
+    try {
+        let ret = [];
+        const querySnapshot = await getDoc(doc(db, "chats", id));
+        if (querySnapshot.exists()) {
+            res.status(200).json({
+                id: querySnapshot.id,
+                ...querySnapshot.data()
+            });
+        } else {
+            res.status(404).json({ error: "Chat not found" });
+        res.status(200).json(ret)};
+    } catch (e) {
+        res.status(400).json({error: e.message});
+    }
+})
+
+router.delete("/:id/:chatid", async (req, res) => {
     try {
         const id = req.params.id;
         const chatId = req.params.chatId;
@@ -41,7 +69,7 @@ router.delete("/inbox/:id/:chatid", async (req, res) => {
     }
 })
 
-router.post("/inbox/:id", async (req, res) => {
+router.post("/:id", async (req, res) => {
     try {
         const u1 = req.params.body.u1
         const u2 = req.params.body.u2
@@ -62,3 +90,5 @@ router.post("/inbox/:id", async (req, res) => {
         res.status(400).json({ error: e.message });
     }
 })
+
+module.exports = router;
