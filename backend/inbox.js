@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const db = require("./firebase");
-const { arrayUnion } = require('firebase/firestore');
+const { collection, getDoc, doc, addDoc, updateDoc, arrayUnion, arrayRemove} = require("firebase/firestore");
 
-router.get("/:id", async (req, res) => {
+router.get("/inbox/:id", async (req, res) => {
     try {
         const id = req.params.id;
-        const user = await getDocs(collection(db, "users", id));
+        console.log(id);
+        const user = await getDoc(collection(db, "users", id));
         const chats = user.data().chats
         res.status(200).json(chats);
     } catch (e) {
@@ -14,10 +15,10 @@ router.get("/:id", async (req, res) => {
     }
 })
 
-router.get("/:id/:chatid", async (req, res) => {
+router.get("/inbox/:id/:chatid", async (req, res) => {
     try {
         const chatId = req.params.chatId;
-        const chat = await getDocs(collection(db, "chats", chatId));
+        const chat = await getDoc(collection(db, "chats", chatId));
         const chatData = chat.data();
         res.status(200).json(chatData);
     } catch (e) {
@@ -25,7 +26,7 @@ router.get("/:id/:chatid", async (req, res) => {
     }
 })
 
-router.delete("/:id/:chatid", async (req, res) => {
+router.delete("/inbox/:id/:chatid", async (req, res) => {
     try {
         const id = req.params.id;
         const chatId = req.params.chatId;
@@ -40,7 +41,7 @@ router.delete("/:id/:chatid", async (req, res) => {
     }
 })
 
-router.post("/:id", async (req, res) => {
+router.post("/inbox/:id", async (req, res) => {
     try {
         const u1 = req.params.body.u1
         const u2 = req.params.body.u2
@@ -52,7 +53,7 @@ router.post("/:id", async (req, res) => {
 
         const id = req.params.id;
         const userRef = doc(db, "users", id);
-        await deleteDoc(doc(db, "chats", chatId))
+        await addDoc(doc(db, "chats", chatId))
         await updateDoc(userRef, {
             chats: arrayUnion(chatId)
         });  
