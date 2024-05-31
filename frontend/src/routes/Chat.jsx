@@ -5,20 +5,20 @@ import { useEffect, useState, useRef } from 'react';
 import axios from 'axios'
 import Navbar from '../components/Navbar';
 import empty from "../assets/mail.png";
-// import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 
 const Chat = () => {
     const [myUserName, setMyUserName] = useState('')
     const myUserID = localStorage.getItem("id");
-    // let { chatID } = useParams();
-
+    let { chatuID } = useParams();
     const [chatID, setChatID] = useState('')
     const [conversation, setConversation] = useState([])
     const chatContainerRef = useRef(null);
 
     const sendMessage = async (message) => {
         const id = 'oLZO2BY2mYv4QAvS6P1w' 
+        console.log(chatID);
         console.log("message to be send: ", message)
         const data = {
             message: message,
@@ -59,7 +59,7 @@ const Chat = () => {
     useEffect(() => {
         // fetchMessages()
         setMyUserName("Milton")
-        setChatID('oLZO2BY2mYv4QAvS6P1w') //use the provided chatID instead
+        setChatID(chatuID) //use the provided chatID instead
         fetchConversation(chatID)
     }, [])
 
