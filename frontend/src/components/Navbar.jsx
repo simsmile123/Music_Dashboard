@@ -24,7 +24,7 @@ function Navbar() {
         </div>{" "}
       </Link>
       <br />
-      <Link to="/profile">
+      {/* <Link to="/profile">
         {" "}
         <div className="link">
           <svg
@@ -40,7 +40,7 @@ function Navbar() {
           Profile
         </div>
       </Link>
-      <br />
+      <br /> */}
       <Link to="/liked-songs">
         {" "}
         <div className="link">
