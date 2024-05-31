@@ -14,4 +14,3 @@ const InboxSearch = ({ searchTerm, onSearch }) => {
 };
 
 export default InboxSearch;
-
