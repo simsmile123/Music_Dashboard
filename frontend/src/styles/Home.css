@@ -74,3 +74,14 @@ body {
 .hit-item p {
   margin-top: 10px;
 }
+
+.banner-container {
+  width: 100%; /* Set the desired width here */
+  display: flex;
+  justify-content: center; /* Centers the image horizontally */
+}
+
+.banner {
+  max-width: 100%; /* Ensures the image does not overflow the container */
+  height: auto; /* Maintains the aspect ratio */
+}

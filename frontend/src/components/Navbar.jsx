@@ -53,7 +53,7 @@ function Navbar() {
             viewBox="0 0 16 16"
           >
             <path
-              fill-rule="evenodd"
+              fillRule="evenodd"
               d="M8 4.41c1.387-1.425 4.854 1.07 0 4.277C3.146 5.48 6.613 2.986 8 4.412z"
             />
             <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z" />
@@ -90,10 +90,10 @@ function Navbar() {
             viewBox="0 0 16 16"
           >
             <path d="M12 13c0 1.105-1.12 2-2.5 2S7 14.105 7 13s1.12-2 2.5-2 2.5.895 2.5 2" />
-            <path fill-rule="evenodd" d="M12 3v10h-1V3z" />
+            <path fillRule="evenodd" d="M12 3v10h-1V3z" />
             <path d="M11 2.82a1 1 0 0 1 .804-.98l3-.6A1 1 0 0 1 16 2.22V4l-5 1z" />
             <path
-              fill-rule="evenodd"
+              fillRule="evenodd"
               d="M0 11.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5m0-4A.5.5 0 0 1 .5 7H8a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5m0-4A.5.5 0 0 1 .5 3H8a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5"
             />
           </svg>
