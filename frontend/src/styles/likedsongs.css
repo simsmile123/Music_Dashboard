@@ -4,6 +4,7 @@
     height: 100vh; 
     width: 120vh;
     margin-left: 185px;
+    align-items: center;
   }
   
   .liked-songs-header {

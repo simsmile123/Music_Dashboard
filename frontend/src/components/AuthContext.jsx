@@ -1,5 +1,4 @@
-import { createContext, useState, useEffect } from "react";
-import axios from "axios";
+import { createContext, useState } from "react";
 
 const AuthContext = createContext();
 
@@ -14,12 +13,12 @@ const AuthProvider = ({ children }) => {
     localStorage.setItem("id", id);
   };
 
-  // Handle log-out
-  const logout = async ({ id }) => {
-    const response = await axios.delete(
-      `http://localhost:5001/spotify/logout/${id}`
-    );
-    console.log(response);
+  // Handle log-out.
+  const logout = () => {
+    setUserData(null);
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("id");
   };
 
   return (
