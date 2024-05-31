@@ -15,7 +15,7 @@ const MessageSend = ({ sendMessage }) => {
 
   return (
     <div>
-      <InputGroup className="mb-3 form-container">
+      <InputGroup className="form-container">
         <Form.Control
           className="send-message"
           placeholder="Type a message..."

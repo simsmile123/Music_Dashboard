@@ -1,14 +1,14 @@
 import '../styles/chat.css'
 
-const Message = ({me}) => {
+const Message = ({me, sender, message}) => {
 
     return (
         <>
             <div className={me ? 'message-container-me' : 'message-container'}> 
                 <div className='text-container'>
-                    <p className='contact'> Cariah</p>
+                    <p className='contact'> {me ? "Me" : sender}</p>
                     <p className='message'> 
-                    Everything about this song is so good, it never gets old! I could listen to it every day.
+                    {message}
                     </p>
                 </div>
             </div>
