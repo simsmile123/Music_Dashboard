@@ -13,7 +13,8 @@ const Login = () => {
   };
 
   return (
-    <div>{isLoggedIn ? <Home /> : <Auth handleLogin={handleLogin} />}</div>
+    // <div>{isLoggedIn ? <Home /> : <Auth handleLogin={handleLogin} />}</div>
+    <Auth />
   );
 };
 

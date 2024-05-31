@@ -21,7 +21,7 @@ const db = require("./firebase");
 const {
   /* <firebase methods>*/
 } = require("firebase/firestore");
-const { collection } = require("firebase/firestore");
+const { collection, getDoc, doc } = require("firebase/firestore");
 
 // Routes will go below
 // Create a route and a handler for GET /posts
@@ -35,6 +35,15 @@ app.get("/posts", (req, res) => {
 app.get("/posts/:id", (req, res) => {
   const id = req.params.id;
   // Do the same as before
+});
+
+app.get("/liked-songs/:id", async (req, res) => {
+  const id = req.params.id;
+  // console.log(id);
+  const docsnap = await getDoc(doc(db, "users", id));
+  const likedsong = docsnap.data().liked_tracks;
+  // Send the data array as a JSON response
+  res.status(200).json(likedsong);
 });
 
 const port = 5001;
