@@ -30,7 +30,7 @@ const Inbox = () => {
           const response = await axios.get(`http://localhost:5001/messages/chat/${chatId}`)
           console.log('Response', response);
           const history = response.data.history;
-          const user = response.data.user2;
+          const user = response.data.user1;
           console.log('History:', history)
           const last_message = history[history.length - 1];
           console.log('last_message',last_message)

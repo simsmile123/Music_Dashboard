@@ -5,11 +5,14 @@ import { useEffect, useState, useRef } from 'react';
 import axios from 'axios'
 import Navbar from '../components/Navbar';
 import empty from "../assets/mail.png";
+// import { useParams } from "react-router-dom";
 
 
 const Chat = () => {
     const [myUserName, setMyUserName] = useState('')
     const myUserID = localStorage.getItem("id");
+    // let { chatID } = useParams();
+
     const [chatID, setChatID] = useState('')
     const [conversation, setConversation] = useState([])
     const chatContainerRef = useRef(null);
