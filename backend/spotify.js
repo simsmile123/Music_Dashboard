@@ -23,6 +23,7 @@ const {
   collection,
   getDocs,
   updateDoc,
+  setDoc,
   doc,
   addDoc,
   deleteDoc,
@@ -114,9 +115,22 @@ router.get("/callback", function (req, res) {
 
         // use the access token to access the Spotify Web API
         const usersResponse = await requestGet(options);
-        const users = usersResponse.body;
+        const user = usersResponse.body;
 
-        console.log(usersResponse.body);
+        let userdata = {};
+
+        userdata.display_name = user.display_name;
+        userdata.user_id = user.id;
+        userdata.user_image = user.images[1].url;
+
+        const docsnap = await getDoc(doc(db, "users", user.id));
+        if (docsnap.exists()) {
+          await updateDoc(doc(db, "users", user.id), userdata);
+        } else {
+          await setDoc(doc(db, "users", user.id), userdata);
+        }
+
+        // console.log(usersResponse.body);
 
         //get a list of the songs saved in the current spotify user's library
         options = {
@@ -127,8 +141,35 @@ router.get("/callback", function (req, res) {
 
         const users_likedtracksResponse = await requestGet(options);
         const users_likedtracks = users_likedtracksResponse.body;
+        let likedsongsdata = [];
 
-        console.log(users_likedtracks);
+        // console.log(users_likedtracks);
+
+        // displays track
+        users_likedtracks.items.forEach((track) => {
+          // initializing empty object
+          let trackdata = {};
+
+          trackdata.track_album = track.track.album.name;
+          trackdata.track_artist = track.track.artists[0].name;
+          trackdata.track_img = track.track.album.images[1].url;
+          trackdata.track_name = track.track.name;
+
+          // track information
+          // console.log(trackdata);
+
+          likedsongsdata.push(trackdata);
+
+          // Access the album object within each track
+          // const album = track.track.album;
+          // console.log("This is the album's artists: ", album.artists);
+        });
+
+        await updateDoc(doc(db, "users", user.id), {
+          liked_tracks: likedsongsdata,
+        });
+
+        // console.log(likedsongsdata);
 
         // grab the user's top artists'
         options = {
@@ -140,7 +181,23 @@ router.get("/callback", function (req, res) {
         const users_topartistsResponse = await requestGet(options);
         const users_topartists = users_topartistsResponse.body;
 
-        console.log(users_topartists);
+        let topartistsdata = [];
+
+        users_topartists.items.forEach((artist) => {
+          let topartist = {};
+
+          topartist.artist_name = artist.name;
+          topartist.artist_img = artist.images[1].url;
+
+          topartistsdata.push(topartist);
+          // console.log(artist.images);
+        });
+
+        // console.log(topartistsdata);
+
+        await updateDoc(doc(db, "users", user.id), {
+          top_artists: topartistsdata,
+        });
 
         // grab user's top tracks
         options = {
@@ -152,7 +209,31 @@ router.get("/callback", function (req, res) {
         const users_toptracksResponse = await requestGet(options);
         const users_toptracks = users_toptracksResponse.body;
 
-        console.log(users_toptracks);
+        let toptracksdata = [];
+
+        users_toptracks.items.forEach((track) => {
+          // console.log(track);
+
+          let trackdata = {};
+
+          // parsing for the specific information we want in the track
+          trackdata.track_album = track.album.name;
+          trackdata.track_artist = track.artists[0].name;
+          trackdata.track_img = track.album.images[1].url;
+          trackdata.track_name = track.name;
+
+          // track information
+          // console.log(trackdata);
+
+          toptracksdata.push(trackdata);
+        });
+
+        // console.log(toptracksdata);
+
+        await updateDoc(doc(db, "users", user.id), {
+          // in our database, we will initialize a field called top_tracks that will contain the array of objects called toptracksdata
+          top_tracks: toptracksdata,
+        });
 
         // we can also pass the token to the browser to make requests from there
         res.redirect(
