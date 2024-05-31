@@ -121,7 +121,14 @@ router.get("/callback", function (req, res) {
 
         userdata.display_name = user.display_name;
         userdata.user_id = user.id;
-        userdata.user_image = user.images[1].url;
+        if (user.images.length > 0){
+          userdata.user_image = user.images[0].url;
+        }
+        else{
+          userdata.user_image = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
+        }
+
+        userdata.chats = [];
 
         const docsnap = await getDoc(doc(db, "users", user.id));
         if (docsnap.exists()) {
@@ -129,7 +136,6 @@ router.get("/callback", function (req, res) {
         } else {
           await setDoc(doc(db, "users", user.id), userdata);
         }
-
         // console.log(usersResponse.body);
 
         //get a list of the songs saved in the current spotify user's library
@@ -373,4 +379,4 @@ router.get("/refresh_token", function (req, res) {
 //   });
 // });
 
-module.exports = router;
+module.exports = router
