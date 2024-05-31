@@ -11,6 +11,7 @@ import TopArtists from "./routes/TopArtists.jsx";
 import TopSongs from "./routes/TopSongs.jsx";
 import Explore from "./routes/Explore.jsx";
 import Inbox from "./routes/Inbox.jsx";
+// import ForumChat from "./routes/ForumChat.jsx";
 import Forum from "./routes/Forum.jsx";
 import Chat from "./routes/Chat.jsx";
 import "./index.css";
