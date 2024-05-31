@@ -23,9 +23,13 @@ const {
   collection,
   getDocs,
   updateDoc,
-  doc,
   setDoc,
+  doc,
+  addDoc,
   deleteDoc,
+  getDoc,
+  query,
+  where,
 } = require("firebase/firestore");
 
 const generateRandomString = (length) => {
@@ -39,7 +43,8 @@ router.get("/login", function (req, res) {
   res.cookie(stateKey, state);
 
   // your application requests authorization
-  var scope = "user-read-private user-read-email user-library-read";
+  var scope =
+    "user-read-private user-read-email user-library-read user-top-read";
   res.redirect(
     "https://accounts.spotify.com/authorize?" +
       querystring.stringify({
@@ -98,6 +103,7 @@ router.get("/callback", function (req, res) {
 
     request.post(authOptions, async function (error, response, body) {
       if (!error && response.statusCode === 200) {
+        // grab the user's info
         var access_token = body.access_token,
           refresh_token = body.refresh_token;
 
@@ -108,24 +114,126 @@ router.get("/callback", function (req, res) {
         };
 
         // use the access token to access the Spotify Web API
-        const userInfoResponse = await requestGet(options);
-        const userInfo = userInfoResponse.body;
+        const usersResponse = await requestGet(options);
+        const user = usersResponse.body;
 
-        // Perform database operations here
-        // try {
-        //   await firebase
-        //     .database()
-        //     .ref("users/" + userInfo.id)
-        //     .set({
-        //       name: userInfo.display_name,
-        //       email: userInfo.email,
+        let userdata = {};
 
-        //     });
-        //   console.log("User info stored in Firebase database");
-        // } catch (error) {
-        //   console.error("Error storing user info:", error);
-        //   // Handle error
-        // }
+        userdata.display_name = user.display_name;
+        userdata.user_id = user.id;
+        userdata.user_image = user.images[1].url;
+
+        const docsnap = await getDoc(doc(db, "users", user.id));
+        if (docsnap.exists()) {
+          await updateDoc(doc(db, "users", user.id), userdata);
+        } else {
+          await setDoc(doc(db, "users", user.id), userdata);
+        }
+
+        // console.log(usersResponse.body);
+
+        //get a list of the songs saved in the current spotify user's library
+        options = {
+          url: "https://api.spotify.com/v1/me/tracks",
+          headers: { Authorization: "Bearer " + access_token },
+          json: true,
+        };
+
+        const users_likedtracksResponse = await requestGet(options);
+        const users_likedtracks = users_likedtracksResponse.body;
+        let likedsongsdata = [];
+
+        // console.log(users_likedtracks);
+
+        // displays track
+        users_likedtracks.items.forEach((track) => {
+          // initializing empty object
+          let trackdata = {};
+
+          trackdata.track_album = track.track.album.name;
+          trackdata.track_artist = track.track.artists[0].name;
+          trackdata.track_img = track.track.album.images[1].url;
+          trackdata.track_name = track.track.name;
+
+          // track information
+          // console.log(trackdata);
+
+          likedsongsdata.push(trackdata);
+
+          // Access the album object within each track
+          // const album = track.track.album;
+          // console.log("This is the album's artists: ", album.artists);
+        });
+
+        await updateDoc(doc(db, "users", user.id), {
+          liked_tracks: likedsongsdata,
+        });
+
+        // console.log(likedsongsdata);
+
+        // grab the user's top artists'
+        options = {
+          url: "https://api.spotify.com/v1/me/top/artists",
+          headers: { Authorization: "Bearer " + access_token },
+          json: true,
+        };
+
+        const users_topartistsResponse = await requestGet(options);
+        const users_topartists = users_topartistsResponse.body;
+
+        let topartistsdata = [];
+
+        users_topartists.items.forEach((artist) => {
+          let topartist = {};
+
+          topartist.artist_name = artist.name;
+          topartist.artist_img = artist.images[1].url;
+
+          topartistsdata.push(topartist);
+          // console.log(artist.images);
+        });
+
+        // console.log(topartistsdata);
+
+        await updateDoc(doc(db, "users", user.id), {
+          top_artists: topartistsdata,
+        });
+
+        // grab user's top tracks
+        options = {
+          url: "https://api.spotify.com/v1/me/top/tracks",
+          headers: { Authorization: "Bearer " + access_token },
+          json: true,
+        };
+
+        const users_toptracksResponse = await requestGet(options);
+        const users_toptracks = users_toptracksResponse.body;
+
+        let toptracksdata = [];
+
+        users_toptracks.items.forEach((track) => {
+          // console.log(track);
+
+          let trackdata = {};
+
+          // parsing for the specific information we want in the track
+          trackdata.track_album = track.album.name;
+          trackdata.track_artist = track.artists[0].name;
+          trackdata.track_img = track.album.images[1].url;
+          trackdata.track_name = track.name;
+
+          // track information
+          // console.log(trackdata);
+
+          toptracksdata.push(trackdata);
+        });
+
+        // console.log(toptracksdata);
+
+        await updateDoc(doc(db, "users", user.id), {
+          // in our database, we will initialize a field called top_tracks that will contain the array of objects called toptracksdata
+          top_tracks: toptracksdata,
+        });
 
         // we can also pass the token to the browser to make requests from there
         res.redirect(
@@ -133,7 +241,6 @@ router.get("/callback", function (req, res) {
             querystring.stringify({
               access_token: access_token,
               refresh_token: refresh_token,
-              id: userInfo.id,
             })
         );
       } else {
@@ -177,118 +284,94 @@ router.get("/refresh_token", function (req, res) {
   });
 });
 
-router.get("/user-info", (req, res) => {
-  const accessToken = req.query.access_token;
+// router.get("/user-info", (req, res) => {
+//   const accessToken = req.query.access_token;
 
-  if (!accessToken) {
-    return res.status(400).json({ error: "Access token is required" });
-  }
+//   if (!accessToken) {
+//     return res.status(400).json({ error: "Access token is required" });
+//   }
 
-  const options = {
-    url: "https://api.spotify.com/v1/me",
-    headers: { Authorization: "Bearer " + accessToken },
-    json: true,
-  };
+//   const options = {
+//     url: "https://api.spotify.com/v1/me",
+//     headers: { Authorization: "Bearer " + accessToken },
+//     json: true,
+//   };
 
-  request.get(options, (error, response, body) => {
-    if (error) {
-      return res.status(500).json({ error: "Failed to fetch user data" });
-    }
-    res.status(200).json(body);
-  });
-});
+//   request.get(options, (error, response, body) => {
+//     if (error) {
+//       return res.status(500).json({ error: "Failed to fetch user data" });
+//     }
+//     res.status(200).json(body);
+//   });
+// });
 
 /* 
-  Getting a user's top tracks
-*/
-router.get("/top-tracks", (req, res) => {
-  const accessToken = req.query.access_token;
+//   Getting a user's top tracks
+// */
+// router.get("/top-tracks", (req, res) => {
+//   const accessToken = req.query.access_token;
 
-  if (!accessToken) {
-    return res.status(400).json({ error: "Access token is required" });
-  }
+//   if (!accessToken) {
+//     return res.status(400).json({ error: "Access token is required" });
+//   }
 
-  const options = {
-    url: "https://api.spotify.com/v1/me/top/tracks",
-    headers: { Authorization: "Bearer " + accessToken },
-    json: true,
-  };
+//   const options = {
+//     url: "https://api.spotify.com/v1/me/top/tracks",
+//     headers: { Authorization: "Bearer " + accessToken },
+//     json: true,
+//   };
 
-  request.get(options, (error, response, body) => {
-    if (error) {
-      return res.status(500).json({ error: "Failed to fetch top tracks" });
-    }
-    res.status(200).json(body);
-  });
-});
+//   request.get(options, (error, response, body) => {
+//     if (error) {
+//       return res.status(500).json({ error: "Failed to fetch top tracks" });
+//     }
+//     res.status(200).json(body);
+//   });
+// });
 
-router.get("/top-artists", (req, res) => {
-  const accessToken = req.query.access_token;
+// router.get("/top-artists", (req, res) => {
+//   const accessToken = req.query.access_token;
 
-  if (!accessToken) {
-    return res.status(400).json({ error: "Access token is required" });
-  }
+//   if (!accessToken) {
+//     return res.status(400).json({ error: "Access token is required" });
+//   }
 
-  const options = {
-    url: "https://api.spotify.com/v1/me/top/artists",
-    headers: { Authorization: "Bearer " + accessToken },
-    json: true,
-  };
+//   const options = {
+//     url: "https://api.spotify.com/v1/me/top/artists",
+//     headers: { Authorization: "Bearer " + accessToken },
+//     json: true,
+//   };
 
-  request.get(options, (error, response, body) => {
-    if (error) {
-      return res.status(500).json({ error: "Failed to fetch top artists" });
-    }
-    res.status(200).json(body);
-  });
-});
+//   request.get(options, (error, response, body) => {
+//     if (error) {
+//       return res.status(500).json({ error: "Failed to fetch top artists" });
+//     }
+//     res.status(200).json(body);
+//   });
+// });
 
-router.get("/artist", (req, res) => {
-  const accessToken = req.query.access_token;
-  const artistId = req.query.artistId;
+// router.get("/artist", (req, res) => {
+//   const accessToken = req.query.access_token;
+//   const artistId = req.query.artistId;
 
-  if (!accessToken) {
-    return res.status(400).json({ error: "Access token is required" });
-  }
+//   if (!accessToken) {
+//     return res.status(400).json({ error: "Access token is required" });
+//   }
 
-  const options = {
-    url: `https://api.spotify.com/v1/artists/${artistId}`,
-    headers: { Authorization: "Bearer " + accessToken },
-    json: true,
-  };
+//   const options = {
+//     url: `https://api.spotify.com/v1/artists/${artistId}`,
+//     headers: { Authorization: "Bearer " + accessToken },
+//     json: true,
+//   };
 
-  request.get(options, (error, response, body) => {
-    if (error) {
-      return res
-        .status(500)
-        .json({ error: `Failed to fetch artist info with id ${artistID}` });
-    }
-    res.status(200).json(body);
-  });
-});
-
-// Get user's liked songs
-router.get("/liked-songs", (req, res) => {
-  const accessToken = req.query.access_token;
-
-  if (!accessToken) {
-    return res.status(400).json({ error: "Access token is required" });
-  }
-
-  const options = {
-    url: "https://api.spotify.com/v1/me/tracks",
-    headers: { Authorization: "Bearer " + accessToken },
-    json: true,
-  };
-
-  request.get(options, (error, response, body) => {
-    if (error) {
-      return res
-        .status(500)
-        .json({ error: "Failed to fetch users liked songs" });
-    }
-    res.status(200).json(body);
-  });
-});
+//   request.get(options, (error, response, body) => {
+//     if (error) {
+//       return res
+//         .status(500)
+//         .json({ error: `Failed to fetch artist info with id ${artistID}` });
+//     }
+//     res.status(200).json(body);
+//   });
+// });
 
 module.exports = router;

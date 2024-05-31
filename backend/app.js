@@ -13,6 +13,9 @@ const clientSecret = process.env.clientSecret;
 const spotify = require("./spotify.js");
 app.use("/spotify", spotify);
 
+const messagingRouter = require("./messaging.js");
+app.use("/messages", messagingRouter);
+
 // // Import our firebase: We still need to import out firebase methods later such as collection, getDocs..etc...
 const db = require("./firebase");
 const {
@@ -38,3 +41,5 @@ const port = 5001;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+

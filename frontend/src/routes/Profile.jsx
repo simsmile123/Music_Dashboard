@@ -6,11 +6,14 @@ const Profile = () => {
   const { user, logout } = useContext(AuthContext);
 
   return (
-    <>
+    <div className="main-content">
       <Navbar/>
-      <h1>Profile</h1>
+      <div>
+          <h1>Profile</h1>
       <button onClick = {logout}> Logout</button>
-    </>
+      </div>
+    
+    </div>
   );
 };
 
