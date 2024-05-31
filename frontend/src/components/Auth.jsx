@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Button from "@mui/material/Button";
-import Login from "../routes/Login";
 
-const Auth = () => {
+const Auth = ({ handleLogin }) => {
   return (
-    <div className="container">
+    <div className="body-container">
       <div id="login">
         <div className="login-container">
           <h1>Log in to your Spotify</h1>
-          <br></br>
+          <br />
           <Button
             variant="contained"
             color="error"
             className="login-button"
-            href="http://localhost:5001/spotify/login"
+            onClick={handleLogin}
           >
             Login
           </Button>
