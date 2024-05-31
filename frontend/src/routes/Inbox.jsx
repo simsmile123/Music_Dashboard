@@ -24,18 +24,20 @@ const Inbox = () => {
 
     const handleChatLog = async () => {
       let chats = []
+
       for (const chatId of chatConvo) {
+        // console.log("chat convo in hc:", chatId)
         try {
           console.log("chatID", chatId)
           const response = await axios.get(`http://localhost:5001/messages/chat/${chatId}`)
-          console.log('Response', response);
+          // console.log('Response', response);
           const history = response.data.history;
           const user = response.data.user1;
-          console.log('History:', history)
+          // console.log('History:', history)
           const last_message = history[history.length - 1];
-          console.log('last_message',last_message)
-          const messageData = last_message.message;
-          const time = last_message.time;
+          // console.log('last_message',last_message)
+          const messageData = last_message["message"];
+          const time = last_message["time"];
           const chatData = {
             'id': chatId,
             'user': user,
@@ -43,11 +45,14 @@ const Inbox = () => {
             'timestamp': time,
           }
           chats.push(chatData)
+          console.log("chats in loop:",chats)
+
           console.log('Data:', chatData);
         } catch (e) {
             console.error(e)
         }
       }
+    console.log("chats in hc:",chats)
       setChatLog(chats);
     }
 
@@ -55,6 +60,7 @@ const Inbox = () => {
       fetchChats();
     }, [])
 
+    // console.log("chat log:",chatLog)
     const filteredChats = chatLog.filter(chat =>
       chat.user.toLowerCase().includes(searchTerm.toLowerCase())
     );

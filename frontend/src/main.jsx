@@ -55,7 +55,7 @@ const router = createBrowserRouter([
     element: <Forum />,
   },
   {
-    path: "/chat/:id",
+    path: "/chat/:chatuID",
     element: <Chat />,
   },
 ]);
