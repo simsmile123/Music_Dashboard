@@ -1,24 +1,23 @@
+import React, { useState, useEffect, useContext } from "react";
+import { AuthContext } from "../components/AuthContext";
+import Navbar from "../components/Navbar";
+import axios from "axios";
 import "../styles/Home.css"; // Assuming you place the CSS in Home.css
 import detaitImg from "../assets/detait-SXyfhR4jmRA-unsplash.jpg";
 import gabrielImg from "../assets/gabriel-gurrola-2UuhMZEChdc-unsplash.jpg";
 import marekImg from "../assets/marek-piwnicki-wgsu3WzFZ5c-unsplash.jpg";
-import React, { useState, useEffect, useContext } from "react";
-import { AuthContext } from "../components/AuthContext";
-import { Link } from "react-router-dom";
-import Navbar from "../components/Navbar";
+import banner from "../assets/banner.png";
 
 const Home = () => {
-  const [messages, setMessages] = useState([]);
-
-  /* After redirecting to Home set useContext variables */
+  const [topAlbums, setTopAlbums] = useState([]);
+  const [topHits, setTopHits] = useState([]);
   const { login } = useContext(AuthContext);
+
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const access_token = urlParams.get("access_token");
     const refresh_token = urlParams.get("refresh_token");
-    const id = urlParams.get("id");
-    localStorage.setItem("id", id);
-    // console.log(id);
+    const id = localStorage.getItem("id");
     const error = urlParams.get("error");
 
     if (error) {
@@ -28,7 +27,32 @@ const Home = () => {
         login({ access_token, refresh_token, id });
       }
     }
+  }, [login]);
+
+  useEffect(() => {
+    const fetchUserData = async (id) => {
+      //const userId = "azn78voutiey00vb32rjt0f37"; // Replace with dynamic user id
+
+      try {
+        const response = await axios.get(
+          `http://localhost:5001/top-artists/${id}`
+        );
+        const userData = response.data;
+
+        if (userData) {
+          setTopAlbums(userData.liked_tracks || []);
+          setTopHits(userData.chats || []);
+        } else {
+          console.log("No such document!");
+        }
+      } catch (error) {
+        console.error("Error getting document:", error);
+      }
+    };
+
+    fetchUserData();
   }, []);
+
   return (
     <div className="main-content">
       <Navbar />
@@ -104,64 +128,44 @@ const Home = () => {
               </a>
             </div>
           </div>
-          {/* replace this stuff with the fetch from spotify api */}
-          <div className="top-albums">
+          <div>
+            {" "}
+            <img className="banner" src={banner} alt="advertisement" />
+          </div>
+          {/* <div className="top-albums">
             <h2>Top Albums</h2>
             <div className="album-list">
-              <div className="album-item">
-                <img src="../assets/queen.jpg" alt="Queen" />
-                <p>Queen</p>
-              </div>
-              <div className="album-item">
-                <img src="../assets/king.jpg" alt="King" />
-                <p>King</p>
-              </div>
-              <div className="album-item">
-                <img src="../assets/rooky.jpg" alt="Rooky" />
-                <p>Rooky</p>
-              </div>
-              <div className="album-item">
-                <img src="../assets/poker.jpg" alt="Poker" />
-                <p>Poker</p>
-              </div>
-              <div className="album-item">
-                <img src="../assets/queen.jpg" alt="Queen" />
-                <p>Queen</p>
-              </div>
+              {topAlbums.map((album, index) => (
+                <div key={index} className="album-item">
+                  this is where the firebase logic is 
+                  <img src={album.track_img} alt={album.track_name} />
+                  <p>{album.track_name}</p>
+                  <p> hello</p>
+                </div>
+              ))}
             </div>
-          </div>
-          {/* replace this stuff with the fetch from spotify api */}
-          <div className="top-hits">
-            <h2>Your Top Hits of the Month</h2>
-            <div className="hits-list">
-              <div className="hit-item">
-                <img src="../assets/queen.jpg" alt="Water" />
-                <p>Water</p>
-              </div>
-              <div className="hit-item">
-                <p>Fire</p>
-              </div>
-              <div className="hit-item">
-                <img src="../assets/queen.jpg" alt="Dance with me" />
-                <p>Dance with me</p>
-              </div>
-              <div className="hit-item">
-                <p>My love is hot</p>
-              </div>
-              <div className="hit-item">
-                <img src="../assets/queen.jpg" alt="Water" />
-                <p>Water</p>
-              </div>
-              <div className="hit-item">
-                <p>Fire</p>
-              </div>
-              <div className="hit-item">
-                <img src="../assets/queen.jpg" alt="Dance with me" />
-                <p>Dance with me</p>
-              </div>
-              <div className="hit-item">
-                <p>My love is hot</p>
-              </div>
+          </div> */}
+
+          {/* // <div className="top-hits">
+          //   top genre 
+          //   <h2>Your Top Genre</h2>
+          //   <div className="hits-list">
+          //     {topHits.map((hit, index) => (
+          //       <div key={index} className="hit-item">
+          //         <p>{hit}</p>
+          //       </div>
+          //     ))}
+          //   </div>
+          // </div> */}
+          <div class="testimonials-container">
+            <div class="testimonial">
+              "Amazing app! It changed my life!" - User A
+            </div>
+            <div class="testimonial">
+              "I can't imagine my day without it." - User B
+            </div>
+            <div class="testimonial">
+              "The best app I've ever used." - User C
             </div>
           </div>
         </div>
